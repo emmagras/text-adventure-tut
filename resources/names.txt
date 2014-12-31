@@ -1,0 +1,12 @@
+// each person will have their own relationship record.
+// this suite of files stores those relationships.
+// names.txt adds a name whenever a character with a new,
+// unique name is instantiated.
+// the relationship files will allow the relationships to 
+// continue developing even after the python file stops
+// executing
+1	harry	potter
+2	ron	weasley
+3	draco	malfoy
+4	hermoine	granger
+5	albus	dumbledore

@@ -1,0 +1,26 @@
+initial, friendly, happy, polite
+initial, friendly, happy, polite
+initial, friendly, happy, polite, formal
+affection, friendly
+terminal, angry, impolite
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+initial

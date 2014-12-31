@@ -1,0 +1,18 @@
+''' 
+me,person_list,avg_feelings_list,subj_avg_feelings_list,temp_feelings_list,temp_feeling_time_list, subj_temp_feelings_list,subj_temp_feelings_time    #,subj_descriptors
+'''
+
+feelings_list = [\
+emma,[sam,thomas,courtney,leah,sona], [5,3,4,1,2], [5,4,4,1,3], [,,,,],[,,,,]    #,[{"from":"bordentown","hair":black"},{},{},{},{}]
+sam,[emma,thomas,courtney,leah,sona], [5,3,3,1,1], [5,3,3,1,2], [,,,,],[,,,,]
+thomas,[sam,emma,courtney,leah,sona], [4,4,,,], [3,3,,,], [,,,,],[,,,,]
+]
+for line in relationships.txt:
+	line.split(',') = ["me", [list,of,people], [list of relations],[],[]] ]
+
+
+
+def update_relationship(self, whom, update):
+	# whom = "thomas"
+	# update = ("category":a_category, "change":int(a_change), "absolute":a_new_val)
+
