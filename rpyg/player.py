@@ -10,6 +10,13 @@ class Player:
     location_x, location_y = (2, 4)
     victory = False
     nl_train = False
+    stats = {"Constitution":10,
+            "Dexterity":7,
+            "Vitality":7,
+            "Intelligence":6,
+            "Wisdom":4,
+            "Charisma":6}
+
     #cheat = False
 
     def is_alive(self):
@@ -23,6 +30,10 @@ class Player:
     def print_inventory(self):
         for item in self.inventory:
             print(item, '\n')
+
+    def view_player_stats(self):
+        for statk, statv in self.stats.items():
+            print("%s: %s\n" % statk, statv)
 
     def move(self, dx, dy):
         self.location_x += dx

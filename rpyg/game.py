@@ -1,17 +1,18 @@
 """
 A simple text adventure designed as a learning experience for new programmers.
+Based originally on the tutorial by Phillip Johnson.
 """
-__author__ = 'Phillip Johnson, Emma Grasmeder'
+__author__ = 'Emma Grasmeder'
 import world
 from player import Player
 
 
 def play():
     def real_game_mode(action_input,player):
-        if action_input == action.hotkey:
+        if action_input == action.hotkey:  #see room.available_actions()
             player.do_action(action, **action.kwargs)
     def nl_train_mode():
-        print("God mode enabled!")
+        print("Entering Natural Language processing mode!")
         player.do_action
         pass
 

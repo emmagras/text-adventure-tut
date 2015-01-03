@@ -1,5 +1,9 @@
-"""Describes the tiles in the world space."""
-__author__ = 'Phillip Johnson, Emma Grasmeder'
+"""
+Describes the tiles in the world space. Designed by Phillip Johnson
+to describe a tile as a room. The new goal is to make rooms variable size,
+and thus a tile represents a single meter of distance
+"""
+__author__ = 'Emma Grasmeder'
 
 import items, enemies, actions, world
 

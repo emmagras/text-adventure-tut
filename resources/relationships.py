@@ -6,7 +6,7 @@ def update_relationship(self, whom, update):
 	# update = ("category":a_category, "change":int(a_change), "absolute":a_new_val)
 
 class Character():
-    def __init__(self,name):
+    def __init__(self,name, already_existing=False):
         self.name = name
         self.character_index = False
         self.my_class = "human" # bathroom_troll, snake, 3_headed_dog
@@ -14,23 +14,40 @@ class Character():
         self.rels = {}
         self.self_esteem = 0
         self.level = 1
+
+        if not already_existing:
+            f = open('names.txt', 'r+'):
+            # filter (lambda ?) how do I get the max index??
+
+
+
+    def assign_index():
+        with open("names.txt", "r+") as f:
+            f = f.read().split('\t')
         
-    def update_relationship(self,other):
+    def update_relationship(self,other,change):
         '''
+        type(self,other) = (object,object) 
+        type(change) = dict
         Called whenever a Game Event happens such that a relationship needs to
         be updated. 
         Examples of such Game Events: 
         Caught Stealing, Initiate Combat, 
         Nonhealing Spells (spells have caveats), meeting a person for the
         first time, certain words depending on personality and context.
+
+        For starters, everyone will assume the best in people, but later
+        we may introduce misanthropy.
         '''
+
+        change_to, change_from = [v for k,v in change.items()]
         
-        if other.name not in [person_list["name"] for person_list in self.rels]:
-            #print("My name is %s and Other's name is %s" %(self.name, other.name))
-            self.build_rels(name=other.name)
-        def new_acquaintence(other):
-            pass #print("double test")
-        new_acquaintence(other)
+
+        
+
+        
+
+        
 
 list1 = [1,2,3,4,5,6]
 list1.delitem("1")
