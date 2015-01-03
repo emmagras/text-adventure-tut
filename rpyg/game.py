@@ -9,7 +9,7 @@ from player import Player
 
 def play():
     def real_game_mode(action_input,player):
-        if action_input == action.hotkey:  #see room.available_actions()
+        if action_input == action.hotkey:  #see world.tile_exists(x,y).room.available_actions()
             player.do_action(action, **action.kwargs)
     def nl_train_mode():
         print("Entering Natural Language processing mode!")
