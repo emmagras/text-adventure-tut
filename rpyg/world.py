@@ -12,11 +12,11 @@ def tile_exists(x, y):
         return(_world.get((x, y)))
 
 
-def load_tiles(tiles_map='resources/map.txt', verbose=False):
+def load_tiles(tiles_map='resources/map.txt', noisy=False):
     """Parses a file that describes the world space into the _world object"""
     rows = open(tiles_map, 'r').readlines()
     for y, row in enumerate(rows):
         rooms_in_row = [room.replace('\n',"") for room in row.split('\t')]
         for x, tile_name in enumerate(rooms_in_row):
             _world[(x, y)] = None if tile_name == '' else getattr(__import__('tiles'), tile_name)(x, y)
-            if verbose: return(_world)
+            if noisy: return(_world)
