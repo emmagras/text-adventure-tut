@@ -19,16 +19,30 @@ class MapTile:
         self.x = x
         self.y = y
 
-    def intro_text(self):
-        """Information to be displayed when the player moves into this tile."""
-        raise NotImplementedError()
+    def event_text(self):
+        '''
+            Information to be displayed when the character moves into 
+            this tile.
 
-    def modify_player(self, the_player):
-        """Process actions that change the state of the player."""
+            In theory, certain tiles should have events, like a trap or
+            your character going becoming invisible to average people. 
+            This function will be the plae for those sentences to be 
+            displayed.
+        '''
+        raise NotImplementedError() 
+
+    def modify_character(self, the_character):
+        '''
+            Just as tiles have events that need text displayed, they also
+            need to implement changes to the character. For example,
+            corners of rooms may modify characters to be less noticable.
+        '''
         raise NotImplementedError()
 
     def adjacent_moves(self):
-        """Returns all move actions for adjacent tiles."""
+        '''
+            Returns all move actions for adjacent tiles.
+        '''
         moves = []
         if world.tile_exists(self.x + 1, self.y):
             moves.append(actions.MoveEast())
@@ -41,7 +55,10 @@ class MapTile:
         return moves
 
     def available_actions(self):
-        """Returns all of the available actions in this room."""
+        '''
+            Returns all of the available actions in this room, given a
+            player's inventory
+        '''
         moves = self.adjacent_moves()
         moves.append(actions.ViewInventory())
 
@@ -55,8 +72,8 @@ class StartingRoom(MapTile):
         You can make out four paths, each equally as dark and foreboding.
         """
 
-    def modify_player(self, the_player):
-        #Room has no action on player
+    def modify_character(self, the_character):
+        #Room has no action on character
         pass
 
 
@@ -66,22 +83,22 @@ class EmptyCavePath(MapTile):
         Another unremarkable part of the cave. You must forge onwards.
         """
 
-    def modify_player(self, the_player):
-        #Room has no action on player
+    def modify_character(self, the_character):
+        #Room has no action on character
         pass
 
 
 class LootRoom(MapTile):
-    """A room that adds something to the player's inventory"""
+    """A room that adds something to the character's inventory"""
     def __init__(self, x, y, item):
         self.item = item
         super().__init__(x, y)
 
-    def add_loot(self, the_player):
-        the_player.inventory.append(self.item)
+    def add_loot(self, the_character):
+        the_character.inventory.append(self.item)
 
-    def modify_player(self, the_player):
-        self.add_loot(the_player)
+    def modify_character(self, the_character):
+        self.add_loot(the_character)
 
 
 class FindDaggerRoom(LootRoom):
@@ -110,11 +127,11 @@ class EnemyRoom(MapTile):
         self.enemy = enemy
         super().__init__(x, y)
 
-    def modify_player(self, the_player):
+    def modify_character(self, the_character):
         if self.enemy.is_alive():
-            the_player.hp = the_player.hp - self.enemy.damage
+            the_character.hp = the_character.hp - self.enemy.damage
             print("Enemy does {} damage. You have {} HP remaining."\
-                .format(self.enemy.damage, the_player.hp))
+                .format(self.enemy.damage, the_character.hp))
 
     def available_actions(self):
         if self.enemy.is_alive():
@@ -161,8 +178,8 @@ class SnakePitRoom(MapTile):
         You have died!
         """
 
-    def modify_player(self, player):
-        player.hp = 0
+    def modify_character(self, character):
+        character.hp = 0
 
 
 class LeaveCaveRoom(MapTile):
@@ -175,8 +192,8 @@ class LeaveCaveRoom(MapTile):
         Victory is yours!
         """
 
-    def modify_player(self, player):
-        player.victory = True
+    def modify_character(self, character):
+        character.victory = True
 
 class LanguageTrainingRoom(MapTile):
     def intro_text(self):
@@ -185,6 +202,6 @@ class LanguageTrainingRoom(MapTile):
         <String text about options!>
         """
 
-    def modify_player(self, player):
-        player.nl_train = True
+    def modify_character(self, character):
+        character.nl_train = True
 

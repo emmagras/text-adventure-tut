@@ -58,9 +58,9 @@ class UsableItem():
     def __init__(self,
                 name,
                 description,
-                value=None,
                 status,
                 is_binary,
+                value=None,
                 **kwargs):
         self.name = name
         self.description = description

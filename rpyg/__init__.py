@@ -1,1 +1,1 @@
-__author__ = 'Phillip Johnson, Emma Grasmeder'
+__author__ = 'Emma Grasmeder'
