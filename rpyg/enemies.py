@@ -1,29 +1,25 @@
 """Defines the enemies in the game"""
-__author__ = 'Phillip Johnson, Emma Grasmeder'
+__author__ = 'Emma Grasmeder'
 
+from character import Character
 
-class Enemy:
-    """A base class for all enemies"""
-    def __init__(self, name, hp, damage):
-        """Creates a new enemy
-
-        :param name: the name of the enemy
-        :param hp: the hit points of the enemy
-        :param damage: the damage the enemy does with each attack
-        """
-        self.name = name
-        self.hp = hp
-        self.damage = damage
-
-    def is_alive(self):
-        return self.hp > 0
-
-
-class GiantSpider(Enemy):
+class GiantSpider(Character):
     def __init__(self):
-        super().__init__(name="Giant Spider", hp=10, damage=2)
+        super().__init__(name="Giant Spider", hp=10, base_damage=20)
 
-
-class Ogre(Enemy):
+class Ogre(Character):
     def __init__(self):
-        super().__init__(name="Ogre", hp=30, damage=15)
+        super().__init__(name="Ogre", hp=30, base_damage=27)
+
+class Bandit(Character):
+    def __init__(self):
+        super().__init__(name="Bandit", hp=8, base_damage=14)
+
+class Dire_Wolf(Character):
+    def __init__(self):
+        super().__init__(name="Dire_Wolf", hp=10, base_damage=75)
+
+class Giant(Character):
+    def __init__(self):
+        super().__init__(name="Giant", hp=50, base_damage=90)
+
