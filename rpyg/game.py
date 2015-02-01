@@ -19,6 +19,7 @@ def play():
         if my_character.is_alive() and not my_character.victory:
             print("--------------\n--\n--------------\nChoose an action: " +"\n")
             available_actions = room.available_actions()
+            print("room avail actions: %s"%room.name)
             for action in available_actions:
                 print(action)
             action_input = input('Action: ')

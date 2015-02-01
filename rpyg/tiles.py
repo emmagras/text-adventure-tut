@@ -10,17 +10,31 @@ import items, enemies, actions, world, usable_items
 
 class MapTile:
     """The base class for a tile within the world space"""
-    def __init__(self, x, y, name=None, contents = [], **kwargs):
-        """Creates a new tile.
+    def __init__(self,
+                x, y, z=100,
+                name="Unremarkable plot",
+                contents = [],
+                character_mods=[],
+                **kwargs):
+        """
+            Creates a new tile.
 
-        :param x: the x-coordinate of the tile
-        :param y: the y-coordinate of the tile
+            :param x: the x-coordinate of the tile
+            :param y: the y-coordinate of the tile
+            :param z: the z-coordinate of the tile
+            :param name: possibly superfluous tile name
+            :param contents: items or characters occupying the tile
+            :param character_mod: prams that affect the character, for example
+                darkness, cold, hot, no air, elevation - all have affects on 
+                character performance or how others see them.
         """
         self.x = x
         self.y = y
-        self.character_modifier = None
-        self.contents = contents
+        self.z = z
         self.name=name
+        self.contents = contents
+        self.character_mods = character_mods
+       
 
     def modify_character(self, character):
         raise NotImplementedError()
@@ -57,21 +71,27 @@ class MapTile:
             Returns all of the available actions in this room, given a
             player's inventory
         '''
+
         moves = self.adjacent_moves()
         moves.append(actions.ViewInventory())
-        #print("MORE DEBUG: Name = %s"%self.name)
         moves.append(actions.CheckSurroundings(self))
 
         return moves
+        #def available_actions(self): OLD
+        #return [item.actions for item in self.contents]
 
 
 class StartingRoom(MapTile):
     def __init__(self,x,y):
-        super().__init__(x,y,name="Starting Room",
-            description="You find yourself if a cave with a" +\
+        name = "Starting Room"
+        description = "You find yourself if a cave with a" +\
                 "flickering torch on the wall.\n You can make out four paths,"\
-                +" each equally as dark and foreboding.",
-            contents=None)
+                +" each equally as dark and foreboding."
+        contents = []
+        super().__init__(x,y,
+            name=name,
+            description=description,
+            contents=contents)
 
     def modify_character(self, character):
         pass
@@ -92,14 +112,14 @@ class House(MapTile):
         A generic base class for dwellings with 4 walls and a roof, by default.
     '''
     def __init__(self, x, y):
-        super().__init__(x,y,name="A Generic House",
-            description="A simple dwelling place,"+\
-                " with 4 walls and a roof (for now)",
-            contents=None)
+        name = "A Generic House"
+        descripton = "A simple dwelling place,"+\
+                " with 4 walls and a roof (for now)"
+        contents = []
+        super().__init__(x,y,name=name,
+            description=description,
+            contents=contents)
     
-    def intro_text(self):
-        return ''' 
-        '''
     def modify_character(self, character):
         pass
 
@@ -109,17 +129,15 @@ class LootRoom(MapTile):
     '''
     def __init__(self, x, y):
         self.contents = \
-            [usable_items.TreasureChest(chest_contents=items.Gold())]
+            [usable_items.TreasureChest(contents=[items.Gold()])]
         self.name = "Treasure Chest Room"
         self.description = "A very dark room, but it looks like there"+\
                 " might be something in the shadows..."
+    
         super().__init__(x, y,
                 contents=self.contents,
                 name=self.name,
                 description=self.description)
-    
-    def available_actions(self):
-        return [item.actions for item in self.contents]
 
     def modify_character(self, character):
         pass
@@ -130,28 +148,27 @@ class FindDaggerRoom(MapTile):
         self.name = "Find Dagger Room",
         self.description = "It's dark, but there seems to be something "+\
                     "glimmering on the floor."
+        
         super().__init__(x, y,
-                contents=self.contents,
-                name=self.name,
-                description=self.description)
+            name=self.name,
+            contents=self.contents,
+            description=self.description)
 
-    def intro_text(self):
-        return """
-        You notice something shiny in the corner.
-        It's a dagger! You pick it up.
-        """
     def modify_character(self, character):
         pass
 
 
 class Find5GoldRoom(MapTile):
     def __init__(self, x, y):
-        super().__init__(x, y)
+        self.contents = [items.Gold(5)]
+        self.name = "Fild Gold Room"
+        self.description = "It's dark, but there seems to be something "+\
+                    "glimmering on the floor."
+        super().__init__(x, y,
+            name=self.name,
+            contents=self.contents,
+            description=self.description)
 
-    def intro_text(self):
-        return """
-        Someone dropped a 5 gold piece. You pick it up.
-        """
     def modify_character(self, character):
         pass
 

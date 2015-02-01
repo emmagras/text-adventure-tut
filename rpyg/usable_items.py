@@ -30,18 +30,47 @@ class TreasureChest(UsableItem):
 
         Implemented to replace the following code from LootRoom in tiles.py
     '''
-    def __init__(self, is_locked=False, chest_contents=None):
+    def __init__(self, 
+                is_lockable="unlocked",
+                is_openable="closed",
+                weight=5,
+                contents=[],
+                actions=["open","close","lock","unlock"]):
+
+        self.description = "A simple wooden box with a lid"
         self.is_lockable = "unlocked"
         self.is_openable = "closed"
-        self.weight = 5
+        self.weight = weight
         self.contents = contents
-        self.actions = ["open","close","lock","unlock"]
+        self.actions = self.available_actions()
 
         super().__init__(name="{} and {} Treasure Chest".\
-            format(str(self.is_lockable).capitalize(),str(self.is_openable)),
-            description="A simple wooden box with a lid",
+                format(str(self.is_lockable).capitalize(),
+                        str(self.is_openable)),
+            description=self.description,
+            is_lockable=self.is_lockable,
+            is_openable=self.is_openable,
             weight=self.weight,
-            contents=self.contents)
+            contents=self.contents,
+            actions=self.actions)
+
+    def available_actions(self):
+        '''
+            Checks which actions are available for the item. Makes sure Closed
+            doors cannot be Closed again.
+        '''
+        actions = []
+        if self.is_lockable:
+            if self.is_lockable == "unlocked":
+                actions.append("unlock")
+            else:
+                actions.append("lock")
+        if self.is_openable:
+            if self.is_openable == "closed":
+                actions.append("open")
+            else:
+                actions.append("close")
+        return(actions)
 
     def do_action(self, *args, **kwargs):
         ''' This function will handle actions on items

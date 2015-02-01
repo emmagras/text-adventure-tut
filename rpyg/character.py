@@ -36,6 +36,16 @@ class Character:
         else:
             print("There doesn't seem to be anything of note in the area...")
 
+    def inspect_item(self,item):
+        if item:
+            print("Upon closer inspection, it seems to be a {}. {}:\n".\
+                format(item.name,item.description))
+            if item.contents and item.contents_visible:
+                print("The {} seems to house {} inside!".\
+                    format(item.name,item.contents))
+        else:
+            print("There doesn't seem to be anything of note...")
+
     def view_character_stats(self):
         for statk, statv in self.stats.items():
             print("%s: %s\n" % statk, statv)

@@ -67,11 +67,13 @@ class Dagger(Weapon):
 
 
 class Gold(Item):
-    def __init__(self, amt):
-        #self.amt = amt
-        self.amt = 100
+    def __init__(self, amount=1):
+        self.amount = amount
+        name = "Gold"
+        description = "A round coin with {} stamped on the front.".\
+                format(str(self.amount)),
+        weight = .03
         super().__init__(\
-            name="Gold",
-            description="A round coin with {} stamped on the front.".\
-                format(str(self.amt)),
-            weight=.03)
+            name=name,
+            description=description,
+            weight=weight)
