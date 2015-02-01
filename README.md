@@ -1,6 +1,7 @@
 New Overview
 -------
-This project has been hijacked for the purpose of experimenting with natural language processing and big data frameworks as a means to improve the RPG experience. 
+This project is a derivative of Phillip Johnson's text adventure tutorial. 
+Simply run "../rpyg/python3 game,py" to play the simple game, as it is, in its experimental form. 
 
 Original Overview
 -------

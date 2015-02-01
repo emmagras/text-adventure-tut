@@ -3,90 +3,75 @@ __author__ = 'Emma Grasmeder'
 
 
 class Item():
-    """The base class for all items"""
-    def __init__(self, name, description, value):
+    '''
+        Items are game objects that are in some way interact-with-able.
+        
+        This class was originally designed for items that players could
+        hold in their inventory, but why should we differentiate between
+        a lock in a wooden door (not an object just anyone can have in
+        their inventory) and a padlock in an inventory. So, doors and
+        traps and any other non-environment, non-character objects will
+        be *items,* and depending on skills will be interact-with-able in
+        different capacities. #maybe only giants can put doors in their
+        #inventory, and only certain crafty people can install doors.
+    '''
+    def __init__(self, name, description, weight):
         self.name = name
         self.description = description
-        self.value = value
+        self.weight = weight
 
     def __str__(self):
-        return "{}\n=====\n{}\nValue: {}\n".format(self.name,
+        return "{}:\n=====\n{}\nWeighs: {}\n".format(self.name,
                                                     self.description,
-                                                    self.value)
+                                                    self.weight)
 
 
 class Weapon(Item):
-    def __init__(self, name, description, value, damage):
-        self.damage = damage
-        super().__init__(name, description, value)
+    def __init__(self, 
+                    name,
+                    description,
+                    weight,
+                    damage,
+                    speed):
+
+        self.damage = damage # 50 -> kill a human in 2 hits (without mods)
+        self.speed = speed # 10 -> 6 uses per minute (without mods)
+        super().__init__(name, description, weight)
 
     def __str__(self):
-        return "{}\n=====\n{}\nValue: {}\nDamage: {}".format(self.name,
+        return "{} \n =====\n{}\nDamage: {}\nWeighs: {}".format(self.name,
                                                             self.description,
-                                                            self.value,
-                                                            self.damage)
+                                                            self.damage,
+                                                            self.weight)
 
 
 class Rock(Weapon):
     def __init__(self):
-        super().__init__(name="Rock",
-                         description="A fist-sized rock, suitable for\
-                          bludgeoning.",
-                         value=0,
-                         damage=5)
+        super().__init__(\
+                    name="Rock",
+                    description="A fist-sized rock, suitable for bludgeoning.",
+                    weight=2.5,
+                    damage=5,
+                    speed=7)
 
 
 class Dagger(Weapon):
     def __init__(self):
-        super().__init__(name="Dagger",
-                         description="A small dagger with\
-                            some rust. Somewhat more dangerous than a rock.",
-                         value=10,
-                         damage=10)
+        super().__init__(\
+                    name="Dagger",
+                    description="A small dagger with some rust.\n"+
+                        "Somewhat more dangerous than a rock.",
+                    weight=2.5,
+                    damage=10,
+                    speed=10)
 
 
 class Gold(Item):
     def __init__(self, amt):
         #self.amt = amt
         self.amt = 100
-        super().__init__(name="Gold",description="A round coin with {} \
-            stamped on the front.".format(str(self.amt)),value=self.amt)
-
-
-class UsableItem():
-    """The base class for all usable items"""
-    def __init__(self,
-                name,
-                description,
-                status,
-                is_binary,
-                value=None,
-                **kwargs):
-        self.name = name
-        self.description = description
-        self.value = value
-        self.status = status
-        self.is_binary = is_binary
-
-        if not is_binary:
-            self.not_binary(kwargs)
-
-    def __str__(self):
-        return "{}\n=====\n{}\nValue: {}\n"\
-            .format(self.name,
-                    self.description,
-                    self.value)
-
-class Door(UsableItem):
-    def __init__(self, is_locked):
-        self.is_locked = False
-        self.status = "open"
-        self.is_binary = True
-        super().__init__(name="Door",description="A heavy wooden door with\
-            rusty hinges sits {} in front of you."\
-                .format(str(self.status)),status=self.status)
-
-    def do_action(self, **kwargs):
-        ''' This function will handle actions on items
-            which have more than one way to be interacted with '''
-        pass
+        super().__init__(\
+            name="Gold",
+            description="A round coin with {} stamped on the front.".\
+                format(str(self.amt)),
+            weight=.03)

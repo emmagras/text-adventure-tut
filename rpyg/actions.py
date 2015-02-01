@@ -60,6 +60,16 @@ class ViewInventory(Action):
                             name='View inventory',
                             hotkey='i')
 
+class CheckSurroundings(Action):
+    '''
+        Lists objects in the room, which character may interact with
+    '''
+    def __init__(self, tile):
+        super().__init__(method=Character.print_surroundings,
+                            name="Check surroundings",
+                            hotkey='c',
+                            tile=tile)
+
 
 class Attack(Action):
     def __init__(self, enemy):

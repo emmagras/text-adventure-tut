@@ -8,10 +8,6 @@ from character import Character
 
 
 def play():
-    def real_game_mode(action_input,my_character):
-        if action_input == action.hotkey:  #see world.tile_exists(x,y).room.available_actions()
-            my_character.do_action(action, **action.kwargs)
-
     world.load_tiles()
     my_character = Character()
     my_character.name = input("Initializing...\n\n\n\n\nAh! Hello\n" +\
@@ -21,13 +17,14 @@ def play():
         room.modify_character(my_character)
         # Check again since the room could have changed the player's state
         if my_character.is_alive() and not my_character.victory:
-            print("Choose an action: " +"\n")
+            print("--------------\n--\n--------------\nChoose an action: " +"\n")
             available_actions = room.available_actions()
             for action in available_actions:
                 print(action)
             action_input = input('Action: ')
             for action in available_actions:
-                    real_game_mode(action_input, my_character)
+                if action_input == action.hotkey:  #see world.tile_exists(x,y).room.available_actions()
+                    my_character.do_action(action, **action.kwargs)
                     break
 
 if __name__ == "__main__":

@@ -5,12 +5,12 @@ and thus a tile represents a single meter of distance
 """
 __author__ = 'Emma Grasmeder'
 
-import items, enemies, actions, world
+import items, enemies, actions, world, usable_items
 
 
 class MapTile:
     """The base class for a tile within the world space"""
-    def __init__(self, x, y):
+    def __init__(self, x, y, name=None, contents = [], **kwargs):
         """Creates a new tile.
 
         :param x: the x-coordinate of the tile
@@ -18,6 +18,12 @@ class MapTile:
         """
         self.x = x
         self.y = y
+        self.character_modifier = None
+        self.contents = contents
+        self.name=name
+
+    def modify_character(self, character):
+        raise NotImplementedError()
 
     def event_text(self):
         '''
@@ -30,14 +36,6 @@ class MapTile:
             displayed.
         '''
         raise NotImplementedError() 
-
-    def modify_character(self, the_character):
-        '''
-            Just as tiles have events that need text displayed, they also
-            need to implement changes to the character. For example,
-            corners of rooms may modify characters to be less noticable.
-        '''
-        raise NotImplementedError()
 
     def adjacent_moves(self):
         '''
@@ -61,65 +59,101 @@ class MapTile:
         '''
         moves = self.adjacent_moves()
         moves.append(actions.ViewInventory())
+        #print("MORE DEBUG: Name = %s"%self.name)
+        moves.append(actions.CheckSurroundings(self))
 
         return moves
 
 
 class StartingRoom(MapTile):
-    def intro_text(self):
-        return """
-        You find yourself if a cave with a flickering torch on the wall.
-        You can make out four paths, each equally as dark and foreboding.
-        """
+    def __init__(self,x,y):
+        super().__init__(x,y,name="Starting Room",
+            description="You find yourself if a cave with a" +\
+                "flickering torch on the wall.\n You can make out four paths,"\
+                +" each equally as dark and foreboding.",
+            contents=None)
 
-    def modify_character(self, the_character):
-        #Room has no action on character
+    def modify_character(self, character):
         pass
-
 
 class EmptyCavePath(MapTile):
-    def intro_text(self):
-        return """
-        Another unremarkable part of the cave. You must forge onwards.
-        """
+    def __init__(self, x, y):
+        self.description = "Another unremarkable part of the cave."+\
+                " You must forge onwards."
+        super().__init__(x,y,name="Empty Cave Path",
+            description=self.description,
+            contents=None)
 
-    def modify_character(self, the_character):
-        #Room has no action on character
+    def modify_character(self, character):
         pass
 
+class House(MapTile):
+    '''
+        A generic base class for dwellings with 4 walls and a roof, by default.
+    '''
+    def __init__(self, x, y):
+        super().__init__(x,y,name="A Generic House",
+            description="A simple dwelling place,"+\
+                " with 4 walls and a roof (for now)",
+            contents=None)
+    
+    def intro_text(self):
+        return ''' 
+        '''
+    def modify_character(self, character):
+        pass
 
 class LootRoom(MapTile):
-    """A room that adds something to the character's inventory"""
-    def __init__(self, x, y, item):
-        self.item = item
-        super().__init__(x, y)
-
-    def add_loot(self, the_character):
-        the_character.inventory.append(self.item)
-
-    def modify_character(self, the_character):
-        self.add_loot(the_character)
-
-
-class FindDaggerRoom(LootRoom):
+    '''
+        A room that contains a treasure chest 
+    '''
     def __init__(self, x, y):
-        super().__init__(x, y, items.Dagger())
+        self.contents = \
+            [usable_items.TreasureChest(chest_contents=items.Gold())]
+        self.name = "Treasure Chest Room"
+        self.description = "A very dark room, but it looks like there"+\
+                " might be something in the shadows..."
+        super().__init__(x, y,
+                contents=self.contents,
+                name=self.name,
+                description=self.description)
+    
+    def available_actions(self):
+        return [item.actions for item in self.contents]
+
+    def modify_character(self, character):
+        pass
+
+class FindDaggerRoom(MapTile):
+    def __init__(self, x, y):
+        self.contents = [items.Dagger()]
+        self.name = "Find Dagger Room",
+        self.description = "It's dark, but there seems to be something "+\
+                    "glimmering on the floor."
+        super().__init__(x, y,
+                contents=self.contents,
+                name=self.name,
+                description=self.description)
 
     def intro_text(self):
         return """
         You notice something shiny in the corner.
         It's a dagger! You pick it up.
         """
+    def modify_character(self, character):
+        pass
 
 
-class Find5GoldRoom(LootRoom):
+class Find5GoldRoom(MapTile):
     def __init__(self, x, y):
-        super().__init__(x, y, items.Gold(5))
+        super().__init__(x, y)
 
     def intro_text(self):
         return """
         Someone dropped a 5 gold piece. You pick it up.
         """
+    def modify_character(self, character):
+        pass
 
 
 class EnemyRoom(MapTile):
@@ -153,6 +187,8 @@ class GiantSpiderRoom(EnemyRoom):
             return """
             The corpse of a dead spider rots on the ground.
             """
+    def modify_character(self, character):
+        pass
 
 
 class OgreRoom(EnemyRoom):
@@ -168,6 +204,8 @@ class OgreRoom(EnemyRoom):
             return """
             A dead ogre reminds you of your triumph.
             """
+    def modify_character(self, character):
+        pass
 
 
 class SnakePitRoom(MapTile):
@@ -178,8 +216,8 @@ class SnakePitRoom(MapTile):
         You have died!
         """
 
-    def modify_character(self, character):
-        character.hp = 0
+    def modify_character(self, the_character):
+        the_character.hp = 0
 
 
 class LeaveCaveRoom(MapTile):
@@ -194,14 +232,4 @@ class LeaveCaveRoom(MapTile):
 
     def modify_character(self, character):
         character.victory = True
-
-class LanguageTrainingRoom(MapTile):
-    def intro_text(self):
-        return """
-        You have entered the Natural Language Training section of the game.
-        <String text about options!>
-        """
-
-    def modify_character(self, character):
-        character.nl_train = True
 

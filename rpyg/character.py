@@ -28,6 +28,14 @@ class Character:
         for item in self.inventory:
             print(item, '\n')
 
+    def print_surroundings(self,tile):
+        if tile.contents:
+            print("After a quick scan of the area, you notice:\n")
+            for item in tile.contents:
+                print(item.name.capitalize(), '\n')
+        else:
+            print("There doesn't seem to be anything of note in the area...")
+
     def view_character_stats(self):
         for statk, statv in self.stats.items():
             print("%s: %s\n" % statk, statv)
@@ -35,7 +43,7 @@ class Character:
     def move(self, dx, dy):
         self.location_x += dx
         self.location_y += dy
-        print(world.tile_exists(self.location_x, self.location_y).intro_text())
+        print(world.tile_exists(self.location_x, self.location_y).description)
 
     def move_north(self):
         self.move(dx=0, dy=-1)
@@ -67,8 +75,6 @@ class Character:
 
     def use(self, direct_object, **kwargs):
         ''' 
-            Need to build in a "sense nearby items" function 
-
             Also, need to see if I can re-use the "do_action" method 
             for usable items.
         '''
