@@ -57,4 +57,4 @@ docs/_build/
 target/
 
 # Folders we're not ready to show yet:
-nlp/*
+nlp/

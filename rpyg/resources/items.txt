@@ -1,0 +1,4 @@
+name	description	damage	weight(kg)	status	is_binary
+gold	Gold: durabile, divisibe, transportabile noncounterfeitabile gold.	.01	.03	""	False
+silver	More common than gold, silver pieces are more practical for everyday use.	.01	.03	""	False
+dagger	A thin blade with a wooden handle, easily hidden under clothing.	2.5	""	0
