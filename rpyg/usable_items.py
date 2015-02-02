@@ -104,13 +104,44 @@ class TreasureChest(UsableItem):
             (str(item.name),str(item.description)) \
                 for item in self.contents]
 
+class Lock(UsableItem):
+    '''
+        Locks prevent items from doing their action.
+    '''
+    def __init__(self,
+                is_lockable=False,
+                weight=2.5,
+                mechanical=True,
+                key=False):
+        self.is_lockable = is_lockable
+        self.weight = weight
 
+    def lock(self):
+        
+    def change_lock(self):
+        if self.is_lockable:
+            if self.is_lockable == "unlocked"
+                self.is_lockable = "locked"
+            else:
+                self.is_lockable = "unlocked"
+        else:
+            self.lock_fail()
+
+    
+    def lock_fail(self):
+        print("This door does not have a lock, and this message shouldnt"\
+            +" ever be seen.")
 
 class Door(UsableItem):
-    def __init__(self, is_locked):
-        self.is_lockable = "unlocked"
-        self.is_openable = "opened"
-        self.weight = 35
+    def __init__(self,
+                is_openable=False,
+                is_lockable=False
+                weight=35,
+                base_hp=100):
+        self.is_openable = is_openable
+        self.weight = weight
+
+        self.lock = Lock(is_lockable)
 
         super().__init__(name="Door",description="A heavy wooden door with\
             rusty hinges sits {} in front of you."\
@@ -134,7 +165,3 @@ class Door(UsableItem):
         self.is_openable = "opened"
     def shut(self):
         self.is_openable = "closed"
-    def lock(self):
-        self.is_lockable = "locked"
-    def unlock(self):
-        self.is_openable = "unlocked"

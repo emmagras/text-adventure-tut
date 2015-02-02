@@ -70,7 +70,6 @@ class CheckSurroundings(Action):
                             hotkey='c',
                             tile=tile)
 
-
 class Attack(Action):
     def __init__(self, enemy):
         super().__init__(method=Character.attack,
